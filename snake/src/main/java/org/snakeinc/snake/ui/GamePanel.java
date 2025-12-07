@@ -59,6 +59,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         g.setFont(new Font("Arial", Font.BOLD, 20));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString("Game Over", (GAME_PIXEL_WIDTH - metrics.stringWidth("Game Over")) / 2, GAME_PIXEL_HEIGHT / 2);
+        // show score below
+        String scoreText = "Score: " + game.getScore().getPoints();
+        g.drawString(scoreText, (GAME_PIXEL_WIDTH - metrics.stringWidth(scoreText)) / 2, GAME_PIXEL_HEIGHT / 2 + 30);
     }
 
     @Override
@@ -98,6 +101,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                 }
                 break;
         }
+        direction = game.getSnake().getHealthState().adjustDirection(direction);
     }
 
     @Override

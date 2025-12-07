@@ -16,6 +16,7 @@ public abstract sealed class Snake permits Anaconda, Python, BoaConstrictor {
     protected final ArrayList<Cell> body;
     protected final FoodEatenListener onFoodEatenListener;
     private final Grid grid;
+    private HealthState healthState = new GoodHealthState();
 
     public Snake(FoodEatenListener listener, Grid grid) {
         this.body = new ArrayList<>();
@@ -36,12 +37,17 @@ public abstract sealed class Snake permits Anaconda, Python, BoaConstrictor {
         return body.getFirst();
     }
 
+    public HealthState getHealthState() {
+        return healthState;
+    }
+
     public void eat(Food food, Cell cell) {
         switch (food) {
             case Apple apple -> eatApple(cell);
             case Broccoli broccoli -> eatBroccoli(cell);
             default -> throw new IllegalStateException("Unexpected food: " + food);
         }
+        healthState = healthState.onEat(food);
         onFoodEatenListener.onFoodEaten(food, cell);
     }
 

@@ -1,8 +1,5 @@
 package org.snakeinc.snake.model.snakes;
 
-import org.snakeinc.snake.model.food.Apple;
-import org.snakeinc.snake.model.food.Broccoli;
-import org.snakeinc.snake.model.food.Food;
 import org.snakeinc.snake.model.food.FoodEatenListener;
 import org.snakeinc.snake.model.Cell;
 import org.snakeinc.snake.model.Grid;

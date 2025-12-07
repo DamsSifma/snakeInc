@@ -4,6 +4,10 @@ import lombok.Getter;
 import org.snakeinc.snake.exception.MalnutritionException;
 import org.snakeinc.snake.exception.OutOfPlayException;
 import org.snakeinc.snake.exception.SelfCollisionException;
+import org.snakeinc.snake.model.food.Apple;
+import org.snakeinc.snake.model.food.Broccoli;
+import org.snakeinc.snake.model.food.Food;
+import org.snakeinc.snake.model.food.FoodEatenListener;
 import org.snakeinc.snake.model.snakes.*;
 
 import java.util.Random;
@@ -24,15 +28,40 @@ public class Game {
         basket.refillIfNeeded(5);
         SnakeType[] types = SnakeType.values();
         type = types[new Random().nextInt(types.length)];
+        FoodEatenListener removeFoodAndUpdateScore = (food, cell) -> {
+            basket.removeFoodInCell(food, cell);
+            updateScore(food);
+        };
+
         snake = switch (type) {
-            case ANACONDA -> new Anaconda(basket::removeFoodInCell, grid);
-            case PYTHON -> new Python(basket::removeFoodInCell, grid);
-            case BOA_CONSTRICTOR -> new BoaConstrictor(basket::removeFoodInCell, grid);
+            case ANACONDA -> new Anaconda(removeFoodAndUpdateScore, grid);
+            case PYTHON -> new Python(removeFoodAndUpdateScore, grid);
+            case BOA_CONSTRICTOR -> new BoaConstrictor(removeFoodAndUpdateScore, grid);
         };
     }
 
     public void iterate(Direction direction) throws OutOfPlayException, SelfCollisionException, MalnutritionException {
         snake.move(direction);
-        basket.refillIfNeeded(1);
+        basket.refillIfNeeded(5);
+    }
+
+    private void updateScore(Food food) {
+        switch (food) {
+            case Apple apple -> {
+                if (!apple.isPoisoned()) {
+                    score.addPoints(2);
+                } else {
+                    score.addPoints(0);
+                }
+            }
+            case Broccoli broccoli -> {
+                if (!broccoli.isSteamed()) {
+                    score.addPoints(1);
+                } else {
+                    score.addPoints(0);
+                }
+            }
+            default -> {}
+        }
     }
 }
