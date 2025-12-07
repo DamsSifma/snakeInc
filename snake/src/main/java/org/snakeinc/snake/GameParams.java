@@ -11,5 +11,5 @@ public class GameParams {
     public static Integer SNAKE_DEFAULT_X = 5;
     public static Integer SNAKE_DEFAULT_Y = 5;
 
-    public static Integer SNAKE_INITIAL_SIZE = 3;
+    public static Integer SNAKE_INITIAL_SIZE = 10;
 }

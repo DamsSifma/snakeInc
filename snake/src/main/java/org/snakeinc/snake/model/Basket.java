@@ -8,34 +8,28 @@ import org.snakeinc.snake.GameParams;
 import org.snakeinc.snake.model.food.Food;
 import org.snakeinc.snake.model.food.FoodFactory;
 import org.snakeinc.snake.model.food.FoodType;
+import org.snakeinc.snake.model.food.strategy.FoodPlacementStrategy;
+import org.snakeinc.snake.model.snakes.Snake;
 
 @Data
 public class Basket {
 
     private Grid grid;
     private List<Food> foods;
+    private FoodPlacementStrategy placementStrategy;
 
-    public Basket(Grid grid) {
+    public Basket(Grid grid, FoodPlacementStrategy placementStrategy) {
         foods = new ArrayList<>();
         this.grid = grid;
+        this.placementStrategy = placementStrategy;
     }
 
-    public void addFood(Cell cell, FoodType foodType) {
+    public void addFood(Cell cell, FoodType foodType, Snake snake) {
         if (cell == null) {
-            var random = new Random();
-            cell = grid.getTile(random.nextInt(0, GameParams.TILES_X), random.nextInt(0, GameParams.TILES_Y));
+            cell = placementStrategy.generateCell(snake, grid);
         }
         Food food = FoodFactory.createFoodInCell(cell, foodType);
         foods.add(food);
-    }
-
-    private Cell findRandomFreeCell() {
-        var random = new Random();
-        Cell cell = null;
-        while (cell.containsASnake() || cell.containsAFood()) {
-            cell = grid.getTile(random.nextInt(0, GameParams.TILES_X), random.nextInt(0, GameParams.TILES_Y));
-        }
-        return cell;
     }
 
     public void removeFoodInCell(Food food, Cell cell) {
@@ -47,12 +41,11 @@ public class Basket {
         return foods.isEmpty();
     }
 
-    private void refill(int nFood) {
+    private void refill(int nFood, Snake snake) {
         for (int i = 0; i < nFood; i++) {
-            addFood(null, getRandomFoodType());
+            addFood(null, getRandomFoodType(), snake);
         }
     }
-
     private FoodType getRandomFoodType() {
         // get random food between apple and broccoli
         var random = new Random();
@@ -64,10 +57,10 @@ public class Basket {
         }
     }
 
-    public void refillIfNeeded(int nApples) {
+    public void refillIfNeeded(int nApples, Snake snake) {
         int missingApple = nApples - foods.size();
         if (missingApple > 0) {
-            refill(missingApple);
+            refill(missingApple, snake);
         }
     }
 
