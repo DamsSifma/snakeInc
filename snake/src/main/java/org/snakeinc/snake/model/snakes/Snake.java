@@ -6,10 +6,7 @@ import org.snakeinc.snake.exception.MalnutritionException;
 import org.snakeinc.snake.exception.OutOfPlayException;
 import org.snakeinc.snake.exception.SelfCollisionException;
 import org.snakeinc.snake.model.*;
-import org.snakeinc.snake.model.food.Apple;
-import org.snakeinc.snake.model.food.Broccoli;
-import org.snakeinc.snake.model.food.Food;
-import org.snakeinc.snake.model.food.FoodEatenListener;
+import org.snakeinc.snake.model.food.*;
 
 public abstract sealed class Snake permits Anaconda, Python, BoaConstrictor {
 
@@ -17,6 +14,11 @@ public abstract sealed class Snake permits Anaconda, Python, BoaConstrictor {
     protected final FoodEatenListener onFoodEatenListener;
     private final Grid grid;
     private HealthState healthState = new GoodHealthState();
+    private SnakeMovementListener snakeMovementListener;
+
+    public void setMovementListener(SnakeMovementListener snakeMovementListener) {
+        this.snakeMovementListener = snakeMovementListener;
+    }
 
     public Snake(FoodEatenListener listener, Grid grid) {
         this.body = new ArrayList<>();
@@ -87,6 +89,10 @@ public abstract sealed class Snake permits Anaconda, Python, BoaConstrictor {
 
         body.getLast().removeSnake();
         body.removeLast();
+
+        if (snakeMovementListener != null) {
+            snakeMovementListener.onSnakeMoved(getHead());
+        }
 
     }
 

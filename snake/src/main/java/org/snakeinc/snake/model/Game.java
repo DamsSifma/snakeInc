@@ -20,7 +20,7 @@ import java.util.Random;
 public class Game {
 
     private final Grid grid;
-    private final Basket basket;
+    private final CrazyBasket basket;
     private final Snake snake;
     private final SnakeType type;
     private final Score score;
@@ -38,7 +38,7 @@ public class Game {
             default -> throw new IllegalStateException();
         };
 
-        basket = new Basket(grid, strategy);
+        basket = new CrazyBasket(grid, strategy);
 
         SnakeType[] types = SnakeType.values();
         type = types[new Random().nextInt(types.length)];
@@ -51,6 +51,8 @@ public class Game {
             case PYTHON -> new Python(removeFoodAndUpdateScore, grid);
             case BOA_CONSTRICTOR -> new BoaConstrictor(removeFoodAndUpdateScore, grid);
         };
+
+        snake.setMovementListener(basket);
 
         basket.refillIfNeeded(5, snake);
     }
