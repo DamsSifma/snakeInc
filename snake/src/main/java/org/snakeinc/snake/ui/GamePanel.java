@@ -17,6 +17,7 @@ import org.snakeinc.snake.exception.OutOfPlayException;
 import org.snakeinc.snake.exception.SelfCollisionException;
 import org.snakeinc.snake.model.Direction;
 import org.snakeinc.snake.model.Game;
+import org.snakeinc.snake.model.snakes.HealthState;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
@@ -79,29 +80,38 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        HealthState healthState = game.getSnake().getHealthState();
+        Direction requested;
+
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
-                if (direction != Direction.RIGHT) {
-                    direction = Direction.LEFT;
-                }
+                requested = Direction.LEFT;
                 break;
             case KeyEvent.VK_RIGHT:
-                if (direction != Direction.LEFT) {
-                    direction = Direction.RIGHT;
-                }
+                requested = Direction.RIGHT;
                 break;
             case KeyEvent.VK_UP:
-                if (direction != Direction.DOWN) {
-                    direction = Direction.UP;
-                }
+                requested = Direction.UP;
                 break;
             case KeyEvent.VK_DOWN:
-                if (direction != Direction.UP) {
-                    direction = Direction.DOWN;
-                }
+                requested = Direction.DOWN;
                 break;
+            default:
+                return;
         }
-        direction = game.getSnake().getHealthState().adjustDirection(direction);
+
+        Direction adjusted = healthState.adjustDirection(requested);
+
+        if (!isOpposite(adjusted, direction)) {
+            direction = adjusted; // on garde la nouvelle direction seulement si elle n'est pas opposée à l'actuelle
+        }
+    }
+
+    private boolean isOpposite(Direction d1, Direction d2) {
+        return (d1 == Direction.LEFT && d2 == Direction.RIGHT)
+                || (d1 == Direction.RIGHT && d2 == Direction.LEFT)
+                || (d1 == Direction.UP && d2 == Direction.DOWN)
+                || (d1 == Direction.DOWN && d2 == Direction.UP);
     }
 
     @Override
