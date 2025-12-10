@@ -1,25 +1,30 @@
 package org.snakeInc.api.model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Player {
-    private final int id;
-    private final int age;
-    private final String name;
-    private final Category category;
-    private final LocalDate createdAt = LocalDate.now();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    public Player(int id, String name, int age) {
-        this.id = id;
+    private int age;
+    private String name;
+
+    private Category category;
+
+    private LocalDate createdAt = LocalDate.now();
+
+    public Player(String name, int age) {
         this.name = name;
         this.age = age;
         this.category = Category.fromAge(age);
     }
-
 }
 

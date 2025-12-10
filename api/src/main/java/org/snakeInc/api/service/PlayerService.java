@@ -2,25 +2,23 @@ package org.snakeInc.api.service;
 
 import org.snakeInc.api.model.Player;
 import org.snakeInc.api.model.PlayerParams;
+import org.snakeInc.api.repository.PlayerRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class PlayerService {
-    private final AtomicInteger idGenerator = new AtomicInteger(0);
-    private final Map<Integer, Player> players = new HashMap<>();
+    private final PlayerRepository playerRepository;
+
+    public PlayerService(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
 
     public Player create(PlayerParams params) {
-        int id = idGenerator.incrementAndGet();
-        Player player = new Player(id, params.getName(), params.getAge());
-        players.put(id, player);
-        return player;
+        Player player = new Player(params.getName(), params.getAge());
+        return playerRepository.save(player);
     }
 
     public Player findById(int id) {
-        return players.get(id);
+        return playerRepository.findById(id).orElse(null);
     }
 }
