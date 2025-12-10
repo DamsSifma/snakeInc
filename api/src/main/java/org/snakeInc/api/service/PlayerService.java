@@ -1,7 +1,7 @@
 package org.snakeInc.api.service;
 
-import org.snakeInc.api.model.Player;
-import org.snakeInc.api.model.PlayerParams;
+import org.snakeInc.api.model.entity.Player;
+import org.snakeInc.api.model.dto.PlayerDto;
 import org.snakeInc.api.repository.PlayerRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-    public Player create(PlayerParams params) {
+    public Player create(PlayerDto params) {
         Player player = new Player(params.getName(), params.getAge());
         return playerRepository.save(player);
     }

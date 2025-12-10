@@ -2,8 +2,8 @@ package org.snakeInc.api.controller;
 
 
 import jakarta.validation.Valid;
-import org.snakeInc.api.model.PlayerParams;
-import org.snakeInc.api.model.Player;
+import org.snakeInc.api.model.dto.PlayerDto;
+import org.snakeInc.api.model.entity.Player;
 
 import org.snakeInc.api.service.PlayerService;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class PlayerController {
     }
 
     @PostMapping()
-    public Player CreatePlayer(@Valid @RequestBody PlayerParams playerParams) {
+    public Player CreatePlayer(@Valid @RequestBody PlayerDto playerParams) {
         return playerService.create(playerParams);
     }
 

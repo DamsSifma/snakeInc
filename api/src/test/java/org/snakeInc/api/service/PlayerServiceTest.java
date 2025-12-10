@@ -7,8 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.snakeInc.api.model.Player;
-import org.snakeInc.api.model.PlayerParams;
+import org.snakeInc.api.model.entity.Player;
+import org.snakeInc.api.model.dto.PlayerDto;
 import org.snakeInc.api.repository.PlayerRepository;
 import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,14 +25,14 @@ public class PlayerServiceTest {
 
     @BeforeEach()
     public void setUp() {
-        PlayerParams playersParams = new PlayerParams();
+        PlayerDto playersParams = new PlayerDto();
         playersParams.setName("TestPlayer");
         playersParams.setAge(20);
     }
 
     @Test
     public void createPlayer_ShouldReturnPlayer() {
-        PlayerParams playersParams = new PlayerParams();
+        PlayerDto playersParams = new PlayerDto();
         playersParams.setName("TestPlayer");
         playersParams.setAge(20);
         Player expectedPlayer = new Player("TestPlayer", 20);
@@ -46,14 +46,15 @@ public class PlayerServiceTest {
 
     @Test
     public void getPlayerById_ShouldReturnPlayer() {
-        PlayerParams playersParams = new PlayerParams();
+        PlayerDto playersParams = new PlayerDto();
         playersParams.setName("TestPlayer");
         playersParams.setAge(20);
-        Player expectedPlayer = new Player("TestPlayer", 20);
 
-        expectedPlayer = new Player("TestPlayer", 20);
+        Player expectedPlayer = new Player("TestPlayer", 20);
+        expectedPlayer.setId(1);
+
         when(playerRepository.save(any())).thenReturn(expectedPlayer);
-        when(playerRepository.findById(any())).thenReturn(Optional.of(expectedPlayer));
+        when(playerRepository.findById(1)).thenReturn(Optional.of(expectedPlayer));
 
         Player createdPlayer = playerService.create(playersParams);
         Player foundPlayer = playerService.findById(createdPlayer.getId());

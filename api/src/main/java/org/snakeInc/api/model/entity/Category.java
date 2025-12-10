@@ -1,4 +1,4 @@
-package org.snakeInc.api.model;
+package org.snakeInc.api.model.entity;
 
 public enum Category {
     JUNIOR,
