@@ -35,4 +35,9 @@ public class ScoreController {
             @RequestParam(required = false) String snake) {
         return scoreService.getScores(playerId, snake);
     }
+
+    @GetMapping("/stats")
+    public Object GetStats(@RequestParam Integer playerId) {
+        return scoreService.getStats(playerId);
+    }
 }

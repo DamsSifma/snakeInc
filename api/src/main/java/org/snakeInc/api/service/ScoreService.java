@@ -1,6 +1,7 @@
 package org.snakeInc.api.service;
 
 import org.snakeInc.api.model.dto.ScoreDto;
+import org.snakeInc.api.model.dto.StatsResponseDto;
 import org.snakeInc.api.model.entity.Score;
 import org.snakeInc.api.repository.PlayerRepository;
 import org.snakeInc.api.repository.ScoreRepository;
@@ -30,5 +31,10 @@ public class ScoreService {
 
     public List<Score> getScores(Integer playerId, String snake) {
        return scoreRepository.findAllFiltered(playerId, snake);
+    }
+
+    public StatsResponseDto getStats(Integer playerId) {
+        var stats = scoreRepository.getStatsByPlayerId(playerId);
+        return new StatsResponseDto(playerId, stats);
     }
 }
