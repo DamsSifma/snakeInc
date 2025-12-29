@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import org.snakeinc.snake.GameIntegrationHelper;
 import org.snakeinc.snake.GameParams;
 import org.snakeinc.snake.exception.MalnutritionException;
 import org.snakeinc.snake.exception.OutOfPlayException;
@@ -29,6 +30,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private Game game;
     private boolean running = false;
     private Direction direction = Direction.RIGHT;
+    private GameIntegrationHelper integrationHelper;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(GAME_PIXEL_WIDTH, GAME_PIXEL_HEIGHT));
@@ -40,6 +42,18 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
     private void startGame() {
         game = new Game();
+        // création du helper d'intégration (point par défaut vers l'API locale)
+        // map SnakeType to API expected snake name
+        String snakeName;
+        switch (game.getType()) {
+            case ANACONDA -> snakeName = "anaconda";
+            case PYTHON -> snakeName = "python";
+            case BOA_CONSTRICTOR -> snakeName = "boaConstrictor";
+            default -> snakeName = game.getType().name().toLowerCase();
+        }
+        integrationHelper = new GameIntegrationHelper("http://localhost:8080/api/v1/scores", snakeName);
+        integrationHelper.askPlayer();
+
         timer = new Timer(100, this);
         timer.start();
         running = true;
@@ -73,6 +87,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
             } catch (OutOfPlayException | SelfCollisionException | MalnutritionException exception ) {
                 timer.stop();
                 running = false;
+                // send score async after stopping the timer (off EDT)
+                integrationHelper.sendScoreAndShowResultAsync(game.getScore().getPoints());
             }
         }
         repaint();

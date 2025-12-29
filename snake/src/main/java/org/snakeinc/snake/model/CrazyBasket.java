@@ -37,7 +37,6 @@ public class CrazyBasket extends Basket implements SnakeMovementListener {
 
     @Override
     public void onSnakeMoved(Cell headPosition) {
-        System.out.println("Snake moved to: " + headPosition.getX() + ", " + headPosition.getY());
         for (Map.Entry<Food, Cell> entry : new HashMap<>(foodPositions).entrySet()) {
             Food food = entry.getKey();
             Cell currentCell = entry.getValue();

@@ -7,14 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.snakeInc.api.model.dto.PlayerDto;
 import org.snakeInc.api.model.dto.ScoreDto;
 import org.snakeInc.api.model.entity.Player;
 import org.snakeInc.api.model.entity.Score;
 import org.snakeInc.api.repository.PlayerRepository;
 import org.snakeInc.api.repository.ScoreRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 

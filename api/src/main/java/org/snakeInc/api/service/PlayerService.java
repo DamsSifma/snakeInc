@@ -18,6 +18,10 @@ public class PlayerService {
         return playerRepository.save(player);
     }
 
+    public Iterable<Player> findAll() {
+        return playerRepository.findAll();
+    }
+
     public Player findById(int id) {
         return playerRepository.findById(id).orElse(null);
     }

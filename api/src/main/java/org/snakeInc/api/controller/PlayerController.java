@@ -22,6 +22,11 @@ public class PlayerController {
         return playerService.create(playerParams);
     }
 
+    @GetMapping
+    public Iterable<Player> findAll() {
+        return playerService.findAll();
+    }
+
     @GetMapping("/{id}")
     public Player GetPlayer(@PathVariable Integer id) {
         return playerService.findById(id);
